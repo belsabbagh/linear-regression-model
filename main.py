@@ -1,5 +1,7 @@
 import pandas as pd
-from src import Plotter, split_dataset
+from src import split_dataset
+from src.linear_regression.fitting_functions import mse
+from src.plotter import Plotter
 from src.linear_regression import LinearRegression
 
 def test_model():
@@ -13,7 +15,7 @@ def test_model():
     model.fit(train['Height'], train[label])
     Plotter.plot_line(df['Height'], [model.predict(i) for i in df['Height']])
     res = [model.predict(i) for i in test['Height']]
-    print(f"Mean squared error: {LinearRegression.mse(test[label], res)}")
+    print(f"Mean squared error: {mse(test[label], res)}")
     Plotter.show()
     print(res)
 
