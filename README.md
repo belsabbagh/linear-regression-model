@@ -4,7 +4,7 @@ This is a simple linear regression model written in Python. It implements gradie
 
 ## Usage
 
-To use the model, simply import the model and create an instance of it. Then, call the fit method to train the model (or use fit_gd for gradient descent). Finally, call the predict method to make predictions.
+To use the model, simply import the model and create an instance of it (or import the GradientDescent variant). Then, call the fit method to train the model. Finally, call the predict method to make predictions.
 
 ```python
 from linear_regression import LinearRegression

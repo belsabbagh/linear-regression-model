@@ -13,22 +13,19 @@ class UnfittedModelException(Exception):
 
 class LinearRegression:
     """Linear regression model."""
-    m: float | int | None
-    c: float | int | None
-    e: float | int
+    m: float | int | None = None
+    c: float | int | None = None
 
     def __init__(self):
-        self.m = None
-        self.c = None
-        self.e = 0
+        return None
 
     @staticmethod
-    def __predict(x, m, c, e):
+    def __predict(x, m, c):
         if isinstance(x, (int, float)):
             return m * x + c
-        return c + sum([i*m for i in x]) + e
+        return c + sum([i*m for i in x])
 
-    def __pre_fit(self, x, y):
+    def _pre_fit(self, x, y):
         if len(x) != len(y):
             raise ValueError("Length of x and y must be the same.")
 
@@ -38,14 +35,27 @@ class LinearRegression:
         return __type(x), __type(y)
 
     def fit(self, x, y):
-        x, y = self.__pre_fit(x, y)
+        x, y = self._pre_fit(x, y)
         self.m, self.c = best_fit(x, y)
-
-    def fit_gd(self, x, y, learning_rate=0.001, threshold=1e-6, log=False):
-        x, y = self.__pre_fit(x, y)
-        self.m, self.c = gd(x, y, learning_rate, threshold, log=log)
 
     def predict(self, x):
         if self.m is None or self.c is None:
             raise UnfittedModelException()
-        return self.__predict(x, self.m, self.c, self.e)
+        return self.__predict(x, self.m, self.c)
+
+
+class GDLinearRegression(LinearRegression):
+    learning_rate: float | int = 0.001
+    threshold: float | int = 1e-6
+    def __init__(self, learning_rate=0.001, threshold=1e-6):
+        super().__init__()
+        if learning_rate <= 0:
+            raise ValueError("Learning rate must be greater than 0.")
+        if threshold <= 0:
+            raise ValueError("Threshold must be greater than 0.")
+        self.learning_rate = learning_rate
+        self.threshold = threshold
+        
+    def fit(self, x, y):
+        x, y = self._pre_fit(x, y)
+        self.m, self.c = gd(x, y, self.learning_rate, self.threshold)
