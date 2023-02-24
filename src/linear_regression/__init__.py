@@ -2,7 +2,7 @@
 Module for models.
 """
 import numpy as np
-from .fitting_functions import gd, best_fit
+from .fitting_functions import gd, least_squares
 
 class UnfittedModelException(Exception):
     """Exception raised when prediction is attempted before fitting."""
@@ -36,7 +36,7 @@ class LinearRegression:
 
     def fit(self, x, y):
         x, y = self._pre_fit(x, y)
-        self.m, self.c = best_fit(x, y)
+        self.m, self.c = least_squares(x, y)
 
     def predict(self, x):
         if self.m is None or self.c is None:

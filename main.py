@@ -1,3 +1,4 @@
+from datetime import timedelta
 from timeit import default_timer
 import pandas as pd
 from src import split_dataset
@@ -13,7 +14,7 @@ def test_model(model):
     train, test = split_dataset(df, split_at)
     start = default_timer()
     model.fit(train['Height'], train[label])
-    print(f"Time taken to fit {model.__class__.__name__}: {round(default_timer() - start, 2)} seconds.")
+    print(f"Time taken to fit {model.__class__.__name__}: {timedelta(seconds=default_timer() - start)}.")
     Plotter.plot_line(df['Height'], [model.predict(i) for i in df['Height']])
     res = [model.predict(i) for i in test['Height']]
     print(f"Mean squared error: {mse(test[label], res)}")
