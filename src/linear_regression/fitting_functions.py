@@ -36,5 +36,5 @@ def gd(x, y, learning_rate=0.001, threshold=1e-6, log=False):
         diff = abs(prev_cost-cost) if prev_cost is not None else 0
         prev_cost = cost
         i += 1
-    print(f"It took {i} iterations to converge.")
+    print(f"Gradient Descent: It took {i} iterations to converge.")
     return weight, bias
