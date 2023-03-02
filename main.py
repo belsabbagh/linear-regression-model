@@ -1,10 +1,16 @@
+"""
+NOTE: This function runs weirdly slow due to the fact that it is using a for loop to iterate over the data.
+The last test took 5 minutes to run.
+"""
+
+
 from datetime import timedelta
 from timeit import default_timer
 import pandas as pd
 from src import split_dataset
 from src.linear_regression.fitting_functions import mse
 from src.plotter import Plotter
-from src.linear_regression import LinearRegression, GDLinearRegression
+from src.linear_regression import GDLinearRegression
 
 def test_model(model):
     df = pd.read_csv('data/data.csv')
@@ -20,6 +26,4 @@ def test_model(model):
     print(f"Mean squared error: {mse(test[label], res)}")
     Plotter.show()
 
-
-test_model(LinearRegression())
 test_model(GDLinearRegression())

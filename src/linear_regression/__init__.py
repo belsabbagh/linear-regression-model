@@ -58,4 +58,5 @@ class GDLinearRegression(LinearRegression):
         
     def fit(self, x, y):
         x, y = self._pre_fit(x, y)
-        self.m, self.c = gd(x, y, self.learning_rate, self.threshold)
+        coeffs = gd(x, y, self.learning_rate, self.threshold)
+        self.c, self.m = coeffs[0], coeffs[1]
