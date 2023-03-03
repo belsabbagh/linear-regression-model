@@ -7,7 +7,7 @@ x1d = pd.DataFrame({
 })
 x2d = pd.DataFrame({
     'C1': [1, 2, 3, 4],
-    'C2': [1, 2, 3, 4],
+    'C2': [1.5, 2.5, 3.5, 4.5],
 })
 y = [2, 4, 6, 8]
 
@@ -16,7 +16,7 @@ def base_test_1d(x, y, fn):
     b = fn(x, y)
     res = [sum([k*p for k, p in zip(v, b[1:])]) + b[0]
            for _, v in x.iterrows()]
-    assert res == y
+    assert [round(i, 3) for i in res] == y
 
 
 def base_test_2d(fn):
@@ -24,7 +24,7 @@ def base_test_2d(fn):
     b = fn(x, y)
     res = [sum([k*p for k, p in zip(v, b[1:])]) + b[0]
            for _, v in x.iterrows()]
-    assert res == y
+    assert [round(i, 3) for i in res] == y
 
 
 def test_1d_least_squares_fit():
