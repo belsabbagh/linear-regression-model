@@ -20,22 +20,24 @@ def mse(y_pred, y):
     return sum([(i-j)**2 for i, j in zip(y, y_pred)]) / len(y)
 
 
-def gd(x: pd.DataFrame, y, learning_rate=0.001, threshold=1e-6, log=False):
+def gd(x: pd.DataFrame, y, learning_rate=0.001, threshold=1e-5, max_iter=None, log=False):
 
     def derivative(rate, n, x, y, y_predicted):
         """Derivative of the cost function."""
         return rate * -(2/n) * sum(x * (y-y_predicted))
 
-    weight, bias, n = 0.1,  0.01, float(len(x))
+    bias, weight, n = 0.01,  0.1, len(x)
     prev_cost = None
     i = 1
     while prev_cost is None or diff > threshold or diff == 0:
+        if max_iter is not None and i >= max_iter:
+            break
         y_pred = (weight * x) + bias
-        weight -= derivative(learning_rate, n, x, y, y_pred)
         bias -= derivative(learning_rate, n, 1, y, y_pred)
+        weight -= derivative(learning_rate, n, x, y, y_pred)
         cost = mse(y_pred, y)
         if log:
-            print({i: {"cost": cost, "m": weight, "c": bias}})
+            print({i: {"cost": cost, "c": bias, "m": weight}})
         diff = abs(prev_cost-cost) if prev_cost is not None else 0
         prev_cost = cost
         i += 1

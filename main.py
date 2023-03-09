@@ -10,7 +10,7 @@ import pandas as pd
 from src import split_dataset
 from src.linear_regression.fitting_functions import mse
 from src.plotter import Plotter
-from src.linear_regression import GDLinearRegression
+from src.linear_regression import GDLinearRegression, LinearRegression
 
 def test_model(model):
     df = pd.read_csv('data/data.csv')
@@ -22,8 +22,10 @@ def test_model(model):
     model.fit(train['Height'], train[label])
     print(f"Time taken to fit {model.__class__.__name__}: {timedelta(seconds=default_timer() - start)}.")
     Plotter.plot_line(df['Height'], [model.predict(i) for i in df['Height']])
-    res = [model.predict(i) for i in test['Height']]
-    print(f"Mean squared error: {mse(test[label], res)}")
+    pred = [model.predict(i) for i in test['Height']]
+    print(f"Mean squared error: {mse(test[label], pred)}")
     Plotter.show()
 
-test_model(GDLinearRegression())
+
+test_model(GDLinearRegression(learning_rate=0.1, threshold=1e-9))
+test_model(LinearRegression())
