@@ -82,4 +82,4 @@ class LogisticRegression(GDLinearRegression):
 
 
     def predict(self, X):
-        return 1 if (1 / (1 + np.exp(- (X.dot(self.W) + self.b)))) > 0.5 else 0
+        return 1 if (1 / (1 + np.exp(-(X.dot(self.W) + self.b)))) > 0.5 else 0

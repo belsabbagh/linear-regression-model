@@ -6,7 +6,7 @@ The last test took 5 minutes to run.
 
 from timeit import default_timer as dt
 import pandas as pd
-from src.linear_regression.fitting_functions import mse
+from src.linear_regression.gradient_descent import mse
 from src.plotter import Plotter
 from src.linear_regression import GDLinearRegression, LinearRegression, LogisticRegression
 from sklearn.preprocessing import LabelEncoder
