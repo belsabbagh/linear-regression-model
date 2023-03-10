@@ -30,7 +30,7 @@ def test_model(X, y, model, plot=True):
 
 
 # test_model(X, y, LinearRegression())
-# test_model(X, y, GDLinearRegression())
+test_model(X, y, GDLinearRegression())
 
 df = pd.read_csv('data/tennis.csv')
 df = df.apply(LabelEncoder().fit_transform)
