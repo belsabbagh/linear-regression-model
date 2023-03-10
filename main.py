@@ -15,11 +15,13 @@ X, y = df[['Height']], df['Weight']
 
 
 def test_model(X, y, model, plot=True):
+    model_name = model.__class__.__name__
+    print (f"Testing {model_name} model.")
     if plot:
         Plotter.plot_points(X, y)
     s = dt()
     model.fit(X, y)
-    print(f"Took {round(dt() - s, 5)}s to fit {model.__class__.__name__}.")
+    print(f"Took {round(dt() - s, 5)}s to fit {model_name}.")
     pred = [model.predict(i) for i in X.values]
     if plot:
         Plotter.plot_line(X, pred)

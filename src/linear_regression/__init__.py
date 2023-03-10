@@ -68,7 +68,7 @@ class GDLinearRegression(LinearRegression):
 class LogisticRegression(GDLinearRegression):
     """Logistic regression model."""
 
-    def __init__(self, learning_rate=0.05, threshold=1e-15):
+    def __init__(self, learning_rate=0.05, threshold=1e-6):
         super().__init__(learning_rate, threshold)
     
     @staticmethod
