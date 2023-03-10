@@ -27,10 +27,10 @@ def test_model(X, y, model, plot=True):
     Plotter.show()
 
 
-test_model(X, y, LinearRegression(), plot=False)
-test_model(X, y, GDLinearRegression(), plot=False)
+# test_model(X, y, LinearRegression())
+# test_model(X, y, GDLinearRegression())
 
-df = pd.read_csv('data/tennis.csv')
-df = df.apply(LabelEncoder().fit_transform)
-X, y = df[['Outlook', 'Temperature', 'Humidity', 'Windy']], df['Play']
-test_model(X, y, LogisticRegression(), plot=False)
+df = pd.read_csv('data/iris.csv')
+df['Species'] = LabelEncoder().fit_transform(df['Species'])
+X, y = df[['SepalLengthCm','SepalWidthCm','PetalLengthCm','PetalWidthCm']], df['Species']
+test_model(X, y, LogisticRegression(learning_rate=0.01), plot=False)

@@ -47,10 +47,10 @@ class LinearRegression:
 
 
 class GDLinearRegression(LinearRegression):
-    rate: float | int = 0.001
-    threshold: float | int = 1e-6
+    rate: float | int = 0.05
+    threshold: float | int = 1e-15
 
-    def __init__(self, learning_rate=0.001, threshold=1e-6):
+    def __init__(self, learning_rate=0.05, threshold=1e-15):
         super().__init__()
         if learning_rate <= 0:
             raise ValueError("Learning rate must be greater than 0.")
@@ -68,13 +68,16 @@ class GDLinearRegression(LinearRegression):
 class LogisticRegression(GDLinearRegression):
     """Logistic regression model."""
 
-    def __init__(self):
-        return None
+    def __init__(self, learning_rate=0.05, threshold=1e-15):
+        super().__init__(learning_rate, threshold)
+    
+    @staticmethod
+    def __pred(x, w):
+        return 1 / (1 + np.exp(- (x.dot(w))))
 
     def fit(self, X, y):
         X, y = self._pre_fit(X, y)
-        coeffs = gd(X, y, self.rate, self.threshold, pred=lambda x,
-                    w: 1 / (1 + np.exp(- (x.dot(w)))))
+        coeffs = gd(X, y, self.rate, self.threshold, pred=self.__pred)
         self.b, self.W = coeffs[0], coeffs[1:]
 
 
