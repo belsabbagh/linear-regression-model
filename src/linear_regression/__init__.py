@@ -83,4 +83,4 @@ class LogisticRegression(GDLinearRegression):
 
     def predict(self, X):
         Z = 1 / (1 + np.exp(- (X.dot(self.W) + self.b)))
-        return np.where(Z > 0.5, 1, 0)
+        return 1 if Z > 0.5 else 0
