@@ -4,6 +4,7 @@ Module for models.
 import numpy as np
 from .fitting_functions import gd, least_squares
 
+
 class UnfittedModelException(Exception):
     """Exception raised when prediction is attempted before fitting."""
 
@@ -13,8 +14,8 @@ class UnfittedModelException(Exception):
 
 class LinearRegression:
     """Linear regression model."""
-    m: float | int | None = None
-    c: float | int | None = None
+    W: list[float | int] | None = None
+    b: float | int | None = None
 
     def __init__(self):
         return None
@@ -37,27 +38,46 @@ class LinearRegression:
     def fit(self, x, y):
         x, y = self._pre_fit(x, y)
         res = least_squares(x, y)
-        self.c, self.m = res[0], res[1:]
+        self.b, self.W = res[0], res[1:]
 
     def predict(self, x):
-        if self.m is None or self.c is None:
+        if self.W is None or self.b is None:
             raise UnfittedModelException()
-        return self.__predict(x, self.m, self.c)
+        return self.__predict(x, self.W, self.b)
 
 
 class GDLinearRegression(LinearRegression):
-    learning_rate: float | int = 0.001
+    rate: float | int = 0.001
     threshold: float | int = 1e-6
+
     def __init__(self, learning_rate=0.001, threshold=1e-6):
         super().__init__()
         if learning_rate <= 0:
             raise ValueError("Learning rate must be greater than 0.")
         if threshold <= 0:
             raise ValueError("Threshold must be greater than 0.")
-        self.learning_rate = learning_rate
+        self.rate = learning_rate
         self.threshold = threshold
-        
+
     def fit(self, x, y):
         x, y = self._pre_fit(x, y)
-        coeffs = gd(x, y, self.learning_rate, self.threshold)
-        self.c, self.m = coeffs[0], coeffs[1:]
+        coeffs = gd(x, y, self.rate, self.threshold)
+        self.b, self.W = coeffs[0], coeffs[1:]
+
+
+class LogisticRegression(GDLinearRegression):
+    """Logistic regression model."""
+
+    def __init__(self):
+        return None
+
+    def fit(self, X, y):
+        X, y = self._pre_fit(X, y)
+        coeffs = gd(X, y, self.rate, self.threshold, pred=lambda x,
+                    w: 1 / (1 + np.exp(- (x.dot(w)))))
+        self.b, self.W = coeffs[0], coeffs[1:]
+
+
+    def predict(self, X):
+        Z = 1 / (1 + np.exp(- (X.dot(self.W) + self.b)))
+        return np.where(Z > 0.5, 1, 0)

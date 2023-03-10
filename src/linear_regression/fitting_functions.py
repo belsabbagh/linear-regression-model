@@ -23,11 +23,12 @@ def mse(y_pred, y):
     return sum([(i-j)**2 for i, j in zip(y, y_pred)]) / len(y)
 
 
-def gd(X: np.ndarray, y, rate=0.05, threshold=1e-15, max_iter=None, log=False):
+def gd(X: np.ndarray, y, rate=0.05, threshold=1e-15, max_iter=None, log=False, **kwargs):
 
     def derivative(rate, n, x, y, y_predicted):
         """Derivative of the cost function."""
         return rate * -(2/n) * sum(x * (y-y_predicted))
+    pred = kwargs.get('pred', lambda x, w: x.dot(w))
     X = add_constant(X)
     n, p = X.shape
     weights = np.zeros(p)
@@ -36,7 +37,7 @@ def gd(X: np.ndarray, y, rate=0.05, threshold=1e-15, max_iter=None, log=False):
     while prev_cost is None or diff > threshold or diff == 0:
         if max_iter is not None and i >= max_iter:
             break
-        y_pred = np.dot(X, weights)
+        y_pred = pred(X, weights)
         weights = [w - derivative(rate, n, X.T[i], y, y_pred) for i, w in enumerate(weights)]
         cost = mse(y_pred, y)
         if log:
