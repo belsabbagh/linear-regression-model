@@ -28,14 +28,19 @@ def base_test_2d(fn):
 
 
 def test_1d_least_squares_fit():
-    base_test_1d(x1d, y, ff.least_squares)
+    x = np.array(x1d)
+    b = ff.least_squares(x, y)
+    for i,j in zip(x,y):
+        m = np.sum([k*p for k, p in zip([i], b[1:])])
+        assert round(m + b[0]) == j 
 
 
 def test_1d_gd_fit():
-    x = np.array([1, 2, 3, 4])
-    b = ff.gd(x, y)
+    x = np.array(x1d)
+    b = ff.gd(x, y, rate=0.05, threshold=1e-15)
     for i,j in zip(x,y):
-        assert round(sum([k*p for k, p in zip([i], b[1:])]) + b[0]) == j 
+        m = np.sum([k*p for k, p in zip([i], b[1:])])
+        assert round(m + b[0]) == j 
 
 
 def test_2d_least_squares_fit():
@@ -43,4 +48,4 @@ def test_2d_least_squares_fit():
 
 
 def test_2d_gd_fit():
-    base_test_2d(ff.nd_gd)
+    base_test_2d(ff.gd)

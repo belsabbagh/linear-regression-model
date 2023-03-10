@@ -23,7 +23,7 @@ class LinearRegression:
     def __predict(x, m, c):
         if isinstance(x, (int, float)):
             return m * x + c
-        return c + sum([i*m for i in x])
+        return c + np.dot(x, m)
 
     def _pre_fit(self, x, y):
         if len(x) != len(y):
@@ -36,7 +36,8 @@ class LinearRegression:
 
     def fit(self, x, y):
         x, y = self._pre_fit(x, y)
-        self.m, self.c = least_squares(x, y)
+        res = least_squares(x, y)
+        self.c, self.m = res[0], res[1:]
 
     def predict(self, x):
         if self.m is None or self.c is None:
@@ -59,4 +60,4 @@ class GDLinearRegression(LinearRegression):
     def fit(self, x, y):
         x, y = self._pre_fit(x, y)
         coeffs = gd(x, y, self.learning_rate, self.threshold)
-        self.c, self.m = coeffs[0], coeffs[1]
+        self.c, self.m = coeffs[0], coeffs[1:]
