@@ -30,17 +30,17 @@ def base_test_2d(fn):
 def test_1d_least_squares_fit():
     x = np.array(x1d)
     b = ff.least_squares(x, y)
-    for i,j in zip(x,y):
+    for i, j in zip(x, y):
         m = np.sum([k*p for k, p in zip([i], b[1:])])
-        assert round(m + b[0]) == j 
+        assert round(m + b[0]) == j
 
 
 def test_1d_gd_fit():
     x = np.array(x1d)
     b = ff.gd(x, y, rate=0.05, threshold=1e-15)
-    for i,j in zip(x,y):
+    for i, j in zip(x, y):
         m = np.sum([k*p for k, p in zip([i], b[1:])])
-        assert round(m + b[0]) == j 
+        assert round(m + b[0]) == j
 
 
 def test_2d_least_squares_fit():

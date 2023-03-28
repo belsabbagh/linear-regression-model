@@ -14,12 +14,12 @@ def mse(y_pred, y):
     return sum([(i-j)**2 for i, j in zip(y, y_pred)]) / len(y)
 
 
-def derivative(n, x, y, y_predicted):
+def derivative(n, x, y, y_pred):
     """
     Derivative of the mean squared error cost function.
     The derivative of the MSE cost function is the negative of the average of the product of the input and the error.
     """
-    return  -(1/n) * sum(x * (y-y_predicted))
+    return  -(1/n) * sum(x * (y-y_pred))
 
 
 def update_weights(rate, n, X, y, y_pred, weights):
@@ -27,18 +27,19 @@ def update_weights(rate, n, X, y, y_pred, weights):
     return [w - rate * derivative(n, X.T[i], y, y_pred) for i, w in enumerate(weights)]
 
 
-def gradient_descent(X: np.ndarray, y, rate=0.05, threshold=1e-15, max_iter=None, pred=None, verbose=False):
+def gradient_descent(X: np.ndarray, y, rate=0.05, threshold=1e-15, max_iter=None, pred=None, cost_fn=mse, verbose=False):
     pred = pred or (lambda x, w: x.dot(w))
     X = add_constant(X)
     n, p = X.shape
-    weights, i, prev_cost, cost = np.zeros(p), 1, None, None
+    weights = np.zeros(p)
+    i, prev_cost, cost = 1, None, None
     while not found_min(cost, prev_cost, threshold, max_iter, i):
         prev_cost = cost if cost is not None else 0
         y_pred = pred(X, weights)
-        cost = mse(y_pred, y)
+        cost = cost_fn(y_pred, y)
         weights = update_weights(rate, n, X, y, y_pred, weights)
         if verbose:
-            print(f'{i}: {dict(cost=cost, weights=weights)}')
+            print(f'{i}: {dict(cost=cost, weights=[round(w, 5) for w in weights])}')
         i += 1
     print(f"Gradient Descent: It took {i} iterations to converge.")
     return weights
